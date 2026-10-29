@@ -13,11 +13,13 @@ Expected Excel tab structure:
 - 'circles': Circular markers (latitude, longitude, radius, name, color)
 """
 
+import os
 import pandas as pd
 import folium
 from folium.plugins import HeatMap, MarkerCluster
 import json
 import xyzservices.providers as xyz
+
 
 
 def parse_coordinate_string(coord_str):
@@ -207,8 +209,24 @@ def create_map_from_excel(excel_file, output_file='map.html',
     m = folium.Map(
         location=[center_lat, center_lon],
         zoom_start=zoom_start,
-        tiles='OpenStreetMap'
+        tiles='OpenStreetMap',
     )
+
+    image_filepath = os.path.join("CMU.png")
+
+    img = folium.raster_layers.ImageOverlay(
+        image=image_filepath,
+        name="CMU",
+        bounds=[[-82, -180], [82, 180]],
+        opacity=1,
+        interactive=False,
+        cross_origin=False,
+        zindex=1,
+    )
+
+    img.add_to(m)
+    folium.LayerControl().add_to(m)
+        
 
     # Add different tile layers (Esri canvas tiles don't require an API key)
     folium.TileLayer(xyz.Esri.WorldGrayCanvas, name='Light Mode').add_to(m)
@@ -245,7 +263,7 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 2:
-        print("Usage: python excel_to_folium_map.py <excel_file> [output_file]")
+        print("Usage: python excel_to_folium_map.py sample_map_data.xlsx sample_map.html")
         print("\nExpected Excel sheet structure:")
         print("  markers: latitude, longitude, name, description, icon, color")
         print("  lines: name, coordinates, color, weight, opacity")
@@ -255,6 +273,6 @@ if __name__ == "__main__":
         sys.exit(1)
 
     excel_file = sys.argv[1]
-    output_file = sys.argv[2] if len(sys.argv) > 2 else 'map.html'
+    output_file = sys.argv[2] if len(sys.argv) > 2 else 'Sue_map.html'
 
     create_map_from_excel(excel_file, output_file)
