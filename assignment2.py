@@ -110,9 +110,6 @@ def add_polygons(map_obj, df_polygons):
                 popup=row.get('name', 'Area'),
                 tooltip=row.get('name', 'Area'),
                 color=row.get('color', 'blue'),
-                fill=True,
-                fill_color=row.get('fill_color', row.get('color', 'lightblue')),
-                fill_opacity=row.get('fill_opacity', 0.4),
                 weight=row.get('weight', 2)
             ).add_to(map_obj)
 
@@ -211,27 +208,26 @@ def create_map_from_excel(excel_file, output_file='map.html',
         zoom_start=zoom_start,
         tiles='OpenStreetMap',
     )
-
-    image_filepath = os.path.join("CMU.png")
-
-    img = folium.raster_layers.ImageOverlay(
-        image=image_filepath,
-        name="CMU",
-        bounds=[[-82, -180], [82, 180]],
-        opacity=1,
-        interactive=False,
-        cross_origin=False,
-        zindex=1,
-    )
-
-    img.add_to(m)
-    folium.LayerControl().add_to(m)
         
 
     # Add different tile layers (Esri canvas tiles don't require an API key)
     folium.TileLayer(xyz.Esri.WorldGrayCanvas, name='Light Mode').add_to(m)
     folium.TileLayer(xyz.Esri.WorldGrayCanvas(variant='Canvas/World_Dark_Gray_Base'),
                      name='Dark Mode').add_to(m)
+
+    
+    image_filepath = os.path.join("CMU.png")
+
+    folium.raster_layers.ImageOverlay(
+        image=image_filepath,
+        name="CMU",
+        bounds=[[-30, -45], [30, 45]],
+        opacity=0.6,
+        interactive=True,
+        cross_origin=False,
+        zindex=1,
+        ).add_to(m)
+
 
     # Add map elements from each tab
     print("Adding markers...")

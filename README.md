@@ -13,7 +13,7 @@ A Python script that parses an Excel spreadsheet with multiple tabs containing d
 - **Circles**: Circular regions with custom radius
 - **Heatmap**: Intensity-based visualization
 - **Marker Clustering**: Automatically groups nearby markers
-- **Multiple Map Layers**: Switch between different map styles
+- **Multiple Map Layers**: Switch between different map styles (including a layer of CMU logo)
 
 ## Installation
 
